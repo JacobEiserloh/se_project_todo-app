@@ -1,5 +1,6 @@
-import { initialTodos} from "../utils/constants.js";
+import { initialTodos, todoTemplate} from "../utils/constants.js";
 import { Todo } from "../components/todo.js";
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
 const addTodoButton = document.querySelector(".button_action_add");
 const addTodoPopup = document.querySelector("#add-todo-popup");
@@ -18,7 +19,8 @@ const closeModal = (modal) => {
 
 const generateTodo = (data) => {
   // this should now be creating a new instance of the Todo class, which will generate the todo element in its constructor and return it.
-  return new Todo(data);
+  const todo = new Todo(data, todoTemplate);
+  return todo.getview(data);
 };
 
 // everything below this i have not touched yet i am going to work out how use oop to refactor this code and the validation code in
@@ -33,6 +35,7 @@ addTodoCloseBtn.addEventListener("click", () => {
   closeModal(addTodoPopup);
 });
 
+// adding todos to list on form submit
 addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const name = evt.target.name.value;
@@ -42,13 +45,15 @@ addTodoForm.addEventListener("submit", (evt) => {
   const date = new Date(dateInput);
   date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
-  const values = { name, date };
+  const values = { name, date , id: uuidv4(), completed: false};
   const todo = generateTodo(values);
   todosList.append(todo);
   closeModal(addTodoPopup);
 });
 
+// initializing list of todos
 initialTodos.forEach((item) => {
   const todo = generateTodo(item);
   todosList.append(todo);
+  console.log(item);
 });
