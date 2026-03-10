@@ -1,6 +1,4 @@
-export { Todo };
-
-class Todo {
+export class Todo {
     constructor(data, selector) {
         this.todoElement = selector.content
             .querySelector(".todo")
@@ -40,7 +38,7 @@ class Todo {
 
         this._setEventListeners();
         this._setDueDate(data);
-        
+
         return this.todoElement;
     }
 }
