@@ -33,8 +33,7 @@ const adjustForTimezone = (date) => {
 };
 
 const generateTodo = (data) => {
-  // this should now be creating a new instance of the Todo class, which will generate the todo element in its constructor and return it.
-  const todo = new Todo(data, todoTemplate);
+  const todo = new Todo(data, "#todo-template");
   return todo.getview(data);
 };
 
@@ -46,21 +45,23 @@ addTodoCloseBtn.addEventListener("click", () => {
   closeModal(addTodoPopup);
 });
 
-// adding todos to list on form submit
+const renderTodo = (data) => {
+  const todo = generateTodo(data);
+  todosList.append(todo);
+}
+
 addTodoForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  const name = evt.target.name.value;
-  const date = adjustForTimezone(evt.target.date.value);
+  const name = evt.target.elements.name.value;
+  const date = adjustForTimezone(evt.target.elements.date.value);
 
   const values = { name, date, id: uuidv4(), completed: false };
-  const todo = generateTodo(values);
-  todosList.append(todo);
+  renderTodo(values);
 
   closeModal(addTodoPopup);
   formValidator.resetValidation();
 });
 
 initialTodos.forEach((item) => {
-  const todo = generateTodo(item);
-  todosList.append(todo);
+  renderTodo(item);
 });

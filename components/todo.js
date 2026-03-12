@@ -1,6 +1,8 @@
 export class Todo {
   constructor(data, selector) {
-    this.todoElement = selector.content.querySelector(".todo").cloneNode(true);
+    this._data = data;
+    const template = document.querySelector(selector);
+    this.todoElement = template.content.querySelector(".todo").cloneNode(true);
     this.todoNameEl = this.todoElement.querySelector(".todo__name");
     this.todoCheckboxEl = this.todoElement.querySelector(".todo__completed");
     this.todoLabel = this.todoElement.querySelector(".todo__label");
@@ -12,10 +14,13 @@ export class Todo {
     this.todoDeleteBtn.addEventListener("click", () => {
       this.todoElement.remove();
     });
+    this.todoCheckboxEl.addEventListener("change", () => {
+      this._data.completed = this.todoCheckboxEl.checked;
+    });
   }
 
-  _setDueDate(data) {
-    const dueDate = new Date(data.date);
+  _setDueDate() {
+    const dueDate = new Date(this._data.date);
     if (!isNaN(dueDate)) {
       this.todoDate.textContent = `Due: ${dueDate.toLocaleString("en-US", {
         year: "numeric",
@@ -25,15 +30,15 @@ export class Todo {
     }
   }
 
-  getview(data) {
-    this.todoNameEl.textContent = data.name;
-    this.todoCheckboxEl.checked = data.completed;
+  getview() {
+    this.todoNameEl.textContent = this._data.name;
+    this.todoCheckboxEl.checked = this._data.completed;
 
-    this.todoCheckboxEl.id = `todo-${data.id}`;
-    this.todoLabel.setAttribute("for", `todo-${data.id}`);
+    this.todoCheckboxEl.id = `todo-${this._data.id}`;
+    this.todoLabel.setAttribute("for", `todo-${this._data.id}`);
 
     this._setEventListeners();
-    this._setDueDate(data);
+    this._setDueDate();
 
     return this.todoElement;
   }
