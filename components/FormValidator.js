@@ -3,35 +3,29 @@ export class FormValidator {
     constructor(settings, formEL) {
         this._settings = settings;
         this._formElement = formEL;
-        
+        this._inputs = Array.from(this._formElement.querySelectorAll(this._settings.inputSelector));
+        this._submitButton = this._formElement.querySelector(this._settings.submitButtonSelector);
     }
 
-    _showInputError(formElement, inputElement, errorMessage) {
-        const errorElementId = `#${inputElement.id}-error`;
-        const errorElement = formElement.querySelector(errorElementId);
-        inputElement.classList.add(settings.inputErrorClass);
-        errorElement.textContent = errorMessage;
-        errorElement.classList.add(settings.errorClass);
+    _showInputError(inputElement) {
+        const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
+        inputElement.classList.add(this._settings.inputErrorClass);
+        errorElement.classList.add(this._settings.errorClass);
+        errorElement.textContent = inputElement.validationMessage;
     };
 
-    _hideInputError(formElement, inputElement) {
-    const errorElementId = `#${inputElement.id}-error`;
-    const errorElement = formElement.querySelector(errorElementId);
-    inputElement.classList.remove(settings.inputErrorClass);
-    errorElement.classList.remove(settings.errorClass);
-    errorElement.textContent = "";
+    _hideInputError(inputElement) {
+        const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
+        inputElement.classList.remove(this._settings.inputErrorClass);
+        errorElement.classList.remove(this._settings.errorClass);
+        errorElement.textContent = "";
     };
 
-    _checkInputValidity(formElement, inputElement) {
+    _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
-        showInputError(
-        formElement,
-        inputElement,
-        inputElement.validationMessage,
-        settings,
-        );
+        this._showInputError(inputElement);
     } else {
-        hideInputError(formElement, inputElement);
+        this._hideInputError(inputElement);
     }
     };
 
@@ -41,40 +35,36 @@ export class FormValidator {
     });
     };
 
-    _toggleButtonState(inputList, buttonElement) {
-    if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add(settings.inactiveButtonClass);
-        buttonElement.disabled = true;
+    _toggleButtonState(inputList) {
+    if (this._hasInvalidInput(inputList)) {
+        this._submitButton.classList.add(this._settings.inactiveButtonClass);
+        this._submitButton.disabled = true;
     } else {
-        buttonElement.classList.remove(settings.inactiveButtonClass);
-        buttonElement.disabled = false;
+        this._submitButton.classList.remove(this._settings.inactiveButtonClass);
+        this._submitButton.disabled = false;
     }
     };
 
-    _setEventListeners(formElement) {
+    _setEventListeners() {
     const inputList = Array.from(
-        formElement.querySelectorAll(settings.inputSelector),
+        this._formElement.querySelectorAll(this._settings.inputSelector),
     );
-    const buttonElement = formElement.querySelector(
-        settings.submitButtonSelector,
+    const buttonElement = this._formElement.querySelector(
+        this._settings.submitButtonSelector,
     );
 
-    toggleButtonState(inputList, buttonElement);
+    this._toggleButtonState(inputList);
 
     inputList.forEach((inputElement) => {
         inputElement.addEventListener("input", () => {
-        checkInputValidity(formElement, inputElement, settings);
-        toggleButtonState(inputList, buttonElement, settings);
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState(inputList);
         });
     });
     };
 
     enableValidation() {
-    const formElement = document.querySelector(settings.formSelector);
-    formElement.addEventListener("submit", (evt) => {
-        evt.preventDefault();
-    });
-    setEventListeners(formElement, settings);
+        this._setEventListeners();
     };
 
 }
