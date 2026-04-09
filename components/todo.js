@@ -1,6 +1,7 @@
 export class Todo {
-  constructor(data, selector) {
+  constructor(data, selector, todoCounter) {
     this._data = data;
+    this._todoCounter = todoCounter;
     const template = document.querySelector(selector);
     this.todoElement = template.content.querySelector(".todo").cloneNode(true);
     this.todoNameEl = this.todoElement.querySelector(".todo__name");
@@ -12,10 +13,17 @@ export class Todo {
 
   _setEventListeners() {
     this.todoDeleteBtn.addEventListener("click", () => {
+      if (this._data.completed) {
+        this._todoCounter.updateCompleted(false);
+      }
+
+      this._todoCounter.updateTotal(false);
       this.todoElement.remove();
     });
+
     this.todoCheckboxEl.addEventListener("change", () => {
       this._data.completed = this.todoCheckboxEl.checked;
+      this._todoCounter.updateCompleted(this._data.completed);
     });
   }
 
