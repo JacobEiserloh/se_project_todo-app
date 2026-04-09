@@ -1,4 +1,4 @@
-class TodoCounter {
+export default class TodoCounter {
   // todos should be the array of initial todos
   // selector is the selector for the counter text element
   constructor(todos, selector) {
@@ -30,5 +30,3 @@ class TodoCounter {
     this._element.textContent = `Showing ${this._completed} out of ${this._total} completed`;
   }
 }
-
-export default TodoCounter;
