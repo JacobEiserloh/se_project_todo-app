@@ -1,4 +1,4 @@
-export { initialTodos, validationConfig, todoTemplate };
+export { initialTodos, validationConfig};
 
 const initialTodos = [
   {
@@ -29,5 +29,3 @@ const validationConfig = {
   inputErrorClass: "popup__input_type_error",
   inactiveButtonClass: "button_disabled",
 };
-
-const todoTemplate = document.querySelector("#todo-template");
