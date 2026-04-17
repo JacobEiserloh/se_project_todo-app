@@ -1,4 +1,4 @@
-export { initialTodos, validationConfig};
+export { initialTodos, validationConfig, formSelectors };
 
 const initialTodos = [
   {
@@ -28,4 +28,9 @@ const validationConfig = {
   errorClass: "popup__error_visible",
   inputErrorClass: "popup__input_type_error",
   inactiveButtonClass: "button_disabled",
+};
+
+const formSelectors = {
+  addTodoButton : document.querySelector(".button_action_add"),
+  addTodoForm : document.querySelector(".popup__form"),
 };

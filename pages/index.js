@@ -1,5 +1,5 @@
 // imports
-import { initialTodos, validationConfig } from "../utils/constants.js";
+import { initialTodos, validationConfig, formSelectors, } from "../utils/constants.js";
 import { Todo } from "../components/Todo.js";
 import { FormValidator } from "../components/FormValidator.js";
 import { v4 as uuidv4 } from "https://jspm.dev/uuid";
@@ -7,12 +7,6 @@ import PopupWithForm from "../components/popupWithForm.js";
 import Section from "../components/section.js";
 import adjustForTimezone from "../utils/adjustfortimezone.js";
 import TodoCounter from "../components/todocounter.js";
-
-// constants
-const addTodoButton = document.querySelector(".button_action_add");
-const addTodoPopup = document.querySelector("#add-todo-popup");
-const addTodoForm = addTodoPopup.querySelector(".popup__form");
-const todosList = document.querySelector(".todos__list");
 
 // todo counter
 const todoCount = new TodoCounter(initialTodos, ".counter__text");
@@ -27,7 +21,6 @@ const addToDoPopupInstance = new PopupWithForm(
     const todoValues = { name, date, id: uuidv4(), completed: false };
 
     const todo = new Todo(todoValues, "#todo-template", todoCount);
-    // todosList.append(todo.getview(todoValues));
     todos.addItem(todo.getview(todoValues));
 
     todoCount.updateTotal(true);
@@ -38,7 +31,7 @@ const addToDoPopupInstance = new PopupWithForm(
 );
 
 // form validator
-const formValidator = new FormValidator(validationConfig, addTodoForm);
+const formValidator = new FormValidator(validationConfig, formSelectors.addTodoForm);
 
 // todo section
 const todos = new Section({
@@ -50,7 +43,7 @@ const todos = new Section({
   containerSelector: ".todos__list",
 });
 
-addTodoButton.addEventListener("click", () => {
+formSelectors.addTodoButton.addEventListener("click", () => {
   addToDoPopupInstance.open();
 });
 

@@ -53,10 +53,6 @@ export class FormValidator {
   }
 
   _setEventListeners() {
-    const inputList = Array.from(
-      this._formElement.querySelectorAll(this._settings.inputSelector),
-    );
-
     this._toggleButtonState();
 
     this._inputs.forEach((inputElement) => {
